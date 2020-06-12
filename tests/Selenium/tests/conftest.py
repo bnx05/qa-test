@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 
@@ -5,6 +6,21 @@ import pytest
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
+
+
+logging.basicConfig(
+    filename='selenium.log',
+    filemode='a',
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
+
+
+def pytest_runtest_setup(item):
+    try:
+        logging.info("Running {}".format(item.name))
+    except Exception as e:
+        logging.error("Exception occured: {}".format(e), exc_info=True)
 
 
 def set_browser():
@@ -28,4 +44,4 @@ def browser(request):
     with set_browser() as browser:
         yield browser
         browser.save_screenshot(
-            time.strftime('./%b-%d-%Y-%H:%M_{}.png'.format(request.node.name)))
+            time.strftime('./screenshots/%b-%d-%Y-%H:%M_{}.png'.format(request.node.name)))

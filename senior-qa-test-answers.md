@@ -55,9 +55,13 @@ Test Summary | Test Environment | Prerequisites | Steps | Test Data | Expected R
 
 **Test Data**: +639238645920
 
-**Expected Result**:
+**Expected Result**: 
+- The mobile number should receive a verification code via SMS.
+- The user should proceed to the Password Setup form after entering the verification code in the modal.
 
-**Actual Result**: 
+**Actual Result**:
+- The mobile number received a verification code.
+- The user was asked to complete the Password Setup form after providing the verification code.
 
 **Status**: PASS
 
@@ -124,7 +128,13 @@ For automated browser tests, we can use
 - pytest as the test framework
 - Python as the programming language
 
+For automated api tests, the basic approach would be to use an existing http library. For Python projects, an example would be the Requests library. 
+
 #### Find bugs, defects, unmet requirements or unexpected behavior
+
+In a fast-paced environment, one approach would be to use risk-based testing to ensure that the features with the most business risk get more attention and are tested thoroughly instead of the those which have lower impact on business and customers.
+
+One way to ensure that adequate testing can be done is to make the developers involved in the testing process. Ideally, before anything gets merged to the testing environment, the developers have ensured that the acceptance criteria have been met and sanity has been applied to their code changes so no time is wasted and the QA team can focus on risk-based and exploratory testing on the product.
 
 #### Report about your work and targets
 
@@ -138,29 +148,29 @@ Area affected	| Components involved (with links) | Test effort | Test coverage |
 #### Ensuring software quality
 
 What are the conditions necessary to safely release it?
-- No regression bugs have been found in the software build.
+- No regression bugs have been found in the software build/s.
+- Automated tests have passed.
+  - Automated tests (unit/integration/end-to-end) should be integrated in the CI/CD so that they will run for each build or deployment.
+  - Reporting of test results should be automatically made available and accessible so there is no delay in addressing them if there are any failures reported.
+- Test report has been reviewed and sign off has been given by stakeholders.
+  - After the QA team has successfully done testing and has submitted the test report, relevant stakeholders should give the thumbs up to indicate that the release is to proceed as planned.
 - Artifacts are properly tagged.
-  - Git tags should be used in repositories so we can easily create Releases off of it, and easily do any rollback if it is needed
-- Automated tests have passed
-  - Automated tests (unit/integration/end-to-end) should be integrated in the CI/CD so that they will run for each build or deployment
-  - Reporting of test results should be automatically made available and accessible so there is no delay in addressing them if there are any failures reported
-- Test report has been reviewed and sign off has been given by stakeholders
-  - After the QA team has successfully done testing and has submitted the test report, relevant stakeholders should give the thumbs up to indicate that the release is to proceed as planned 
-- Deployment checklist is ready
+  - Git tags should be used in repositories so we can easily create Releases off of it, and easily do any rollback if it is needed.
+- Deployment checklist is ready.
   - A checklist of things to do before and after any deployment should be created or updated.
   - Typical things in this checklist include:
     - Any database changes that need to be done manually
     - New environment variables to be added
     - Any configuration that need to be added/updated
-- Post deploy smoke tests are ready
+- Post deploy smoke tests are ready.
   - Smoke tests to ensure that the system is up and running and critical functionalities are in place.
   - Ideally these smoke tests are already automated. If there are some that need to be done manually then those should be performed ASAP after deployment.
-- Alerts are in place
+- Alerts are in place.
   - The team should be alerted for each deployment’s status.
   - If there are any critical issues, there should be an alert created for those so that the team will know ASAP and can fix the issues before the customers see them.
-- Rollback plan is in place
+- Rollback plan is in place.
   - In the worst case scenario where a deployment failed or there are production issues, a rollback can be done immediately and there is no significant downtime for customers.
-- Customers have been informed ahead of time if there is any planned outage related to the release
+- Customers have been informed ahead of time if there is any planned outage related to the release.
   - If the release is a major one and there is significant downtime involved, existing customers should be informed several days in advance.
   - A “maintenance” page should also be put up so that if a customer accesses the site during the planned downtime, they will see a nice UI informing them of the downtime and when to check back again.
   - Customers should also be informed after the planned downtime has been finished.
