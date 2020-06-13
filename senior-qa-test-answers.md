@@ -53,7 +53,7 @@ Test Summary | Test Environment | Prerequisites | Steps | Test Data | Expected R
 1. Enter the mobile number
 1. Click on Get Started
 
-**Test Data**: +639238645920
+**Test Data**: +639xxxxxxxxx
 
 **Expected Result**: 
 - The mobile number should receive a verification code via SMS.
@@ -67,7 +67,7 @@ Test Summary | Test Environment | Prerequisites | Steps | Test Data | Expected R
 
 #
 
-**Test Summary**: Sign up using an invalid mobile number
+**Test Summary**: Sign up using an expired mobile number
 
 **Test Environment**:
 - OS: Ubuntu 18.04
@@ -94,7 +94,7 @@ Test Summary | Test Environment | Prerequisites | Steps | Test Data | Expected R
 
 #
 
-**Test Summary**: Sign up using an existing mobile number
+**Test Summary**: Sign up using a mobile number that has an existing Zen Rooms account
 
 **Test Environment**:
 - OS: Ubuntu 18.04
@@ -111,13 +111,78 @@ Test Summary | Test Environment | Prerequisites | Steps | Test Data | Expected R
 1. Enter the mobile number
 1. Click on Get Started
 
-**Test Data**: +639974497242
+**Test Data**: +639xxxxxxxxx
 
 **Expected Result**: User should be informed that the number is already in use
 
 **Actual Result**: A message “This phone number is already in user” appears
 
 **Status**: PASS
+
+#
+
+**Test Summary**: Login using a registered mobile number that has not yet set up a password
+
+**Test Environment**:
+- OS: Ubuntu 18.04
+- Browser: Chrome v83.0.4103.61
+
+**Prerequisites**:
+- A mobile number that is registered with Zen Rooms but has no password yet
+
+**Steps**:
+1. Open https://www.zenrooms.com/
+1. Click on the Sign in/Join button.
+1. Click on the Sign in link.
+1. Click on the Mobile tab.
+1. Enter the mobile number and a random password.
+1. Click on Sign In.
+
+**Test Data**: +639xxxxxxxxx
+
+**Expected Result**:
+- An error message should appear, informing the user that the phone and password combination is incorrect.
+- User should not be able to login.
+
+**Actual Result**:
+- An error message saying "The phone number or password is not correct." appears.
+- The user is unable to move past the Sign in modal.
+
+**Status**: PASS
+
+#
+
+**Test Summary**: Login using a registered mobile number and invalid password multiple times
+
+**Test Environment**:
+- OS: Ubuntu 18.04
+- Browser: Chrome v83.0.4103.61
+
+**Prerequisites**:
+- A mobile number that is registered with Zen Rooms
+
+**Steps**:
+1. Open https://www.zenrooms.com/
+1. Click on the Sign in/Join button.
+1. Click on the Sign in link.
+1. Click on the Mobile tab.
+1. Enter the mobile number and invalid password.
+1. Click on Sign In.
+1. Repeat steps 5 and 6 at least 10 times in under a minute.
+
+**Test Data**: 
+- mobile number: +639xxxxxxxxx
+- password: many variations of an invalid password
+
+**Expected Result**:
+- The account should be locked out after a predetermined number of invalid login attempts (some rate-limiting in place to prevent easy brute force attacks).
+- The user should be informed that the account has been locked out and they can try again after x hours/minutes.
+
+**Actual Result**:
+- An error message saying "The phone number or password is not correct." appears.
+- The user is not locked out and you can keep on attempting to login multiple times.
+
+**Status**: FAIL
 
 #
 
@@ -128,7 +193,32 @@ For automated browser tests, we can use
 - pytest as the test framework
 - Python as the programming language
 
-For automated api tests, the basic approach would be to use an existing http library. For Python projects, an example would be the Requests library. 
+For automated api tests, the basic approach would be to use an existing http library. For Python projects, an example would be the Requests library. If the Python project is also using the pytest framework, another tool to automate functional API tests would be Tavern, which is a pytest plugin.
+
+For the above-mentioned test "Login using a registered mobile number and invalid password", we can automate this in Tavern like so (this test should pass):
+
+```
+---
+test_name: Login using a registered mobile number and invalid password
+
+stages:
+  - name: Login using invalid password
+    request:
+      url: "https://www.zenrooms.com/users/auth/by-phone-number"
+      method: POST
+      json:
+        phone_number: "+63997449xxxx"
+        password: "passworD123"
+    response:
+      status_code: 401
+      json:
+        message: "User authentication failed"
+        errors: ["The phone number or password is not correct."]
+
+```
+
+If we want to do load testing, a quick and dirty tool would be Apache Bench. For example, if we want to know how long it will take to return a query for accommodation in Kalibo (Philippines), we can do this: `ab -n 10 https://www.zenrooms.com/en/hotels?searchText=Kalibo` where `n` is the number of requests (we can do more like add a concurrency level but testing this in production is very risky).
+
 
 #### Find bugs, defects, unmet requirements or unexpected behavior
 
