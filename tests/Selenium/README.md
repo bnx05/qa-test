@@ -20,8 +20,7 @@ This folder contains the browser tests for the Todo List app. The tests use a co
 ## Running the tests
 
 1. If you are using a virtual environment, enable it first by navigating to the `tests/Selenium` folder and executing `source env/bin/activate`.
-1. Run all tests by calling `pytest tests/` in the command line.
-  - If you want to run smoke tests only, call `pytest tests/ -m "smoketest"` in the command line.
+1. Run all tests by calling `pytest tests/` in the command line. If you want to run smoke tests only, call `pytest tests/ -m "smoketest"` in the command line.
 1. If you want to see a rudimentary html report for the test run, you can append `--html=test_run.html` when running the tests. An html file will be generated after the tests have finished.
 1. Screenshots will always be generated on each test run, and are found in the `screenshots` folder.
 1. Basic logging is available and can be found in the `selenium.log` file.
