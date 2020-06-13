@@ -8,6 +8,10 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
 
+if not os.path.exists('screenshots'):
+    os.mkdir('screenshots')
+
+
 logging.basicConfig(
     filename='selenium.log',
     filemode='a',
