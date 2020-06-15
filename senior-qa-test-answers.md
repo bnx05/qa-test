@@ -25,7 +25,7 @@ What are the:
 #### Define use cases
 
 Use cases can be defined with the help of [UML use case diagrams](https://en.wikipedia.org/wiki/Use_case_diagram). 
-A very simple example can be found below:
+A very simple example can be found here: https://drive.google.com/file/d/12STOztN_5Fl09cmVWh5D8e7u-FkXaDOo/view?usp=sharing
 
 #### Manual tests
 
